@@ -1,0 +1,147 @@
+---
+title: 'Horses for courses: a fresh look at the horse kick data'
+author:
+  - Antony Unwin and Bill Venables
+output: bookdown::pdf_document2
+bibliography: gda.bib
+toc: false
+---
+
+# Abstract {-}
+The dataset of deaths by horse kick in Prussian Army Corps in the late 19th century has been used in innumerable courses and textbooks over the years to illustrate the Poisson distribution.  Reexamining the orginal source and other books of the time reveals that there is more data and more information.  An enlarged and corrected version of the dataset is discussed and analysed,  including the use of Poisson models and generalised linear models.
+
+# Introduction
+
+In 1898 von Bortkiewicz used a dataset on deaths in Prussian Army Corps to illustrate what he called the Law of Small Numbers (@vonBortk:1898).  At the time Statistics could only be applied to large datasets and he wanted to show that the subject had application for small datasets as well.  He took annual data on deaths due to horsekicks in 14 Army Corps over 20 years from 1875 to 1894.  They had been reported in the official state publication "Preussische Statistik".  At the start of the period a unified Germany had just been created following their victory over France in the Franco-Prussian war of 1870-71.  Germany was not involved in a war again until 1914 when the First World War began.
+
+Since von Bortkiewicz introduced the dataset, it has been used again and again (and again).  Yule included a table in the first edition of his textbook, @yule:1911.  Whitaker, a student of Pearson, analysed the data in 1914 (@whitaker:1914).  Keynes discussed the dataset in his 1921 book on probability (@keynes:1921).  Fisher used it in his text "Statistical Analysis for Research Workers" (@fisher:1925), as did Jeffreys in his "Theory of Probability" (@jeffreys:1939).  Other books where it has been used include @bishop:1974 and two collections of datasets, @andherz:1985 and @hand:1994.  Several articles have been written on it, including @winsor:1947,  @preece:1988, and @quine:1987---who mentioned that Markov used the summary data in a paper in Russian in 1916.  Good mentioned it in his article on statistical applications of Poisson's work (@good:1986) and suggested the Poisson distribution should really be named after von Bortkiewicz.  More recently Stigler's paper on what he called the limited shelf life of datasets included the horsekicks data as one of his three illustrations (@stigler:2019).  As early as 1950 Kendall remarked in his LSE inaugural lecture:  "Practically every text-book written in the past forty years has exemplified this law by quoting some data collected by von Bortkiewicz concerning the number of officers in the Prussian cavalry corps who were killed by the kick of a horse.  The example is so hackneyed that a bored reader once wrote to me imploring me to vary it." (@kendall:1950)  However, as Hand et al wrote in 1994:  "The "horse-kicks" data are amongst the most well-known and least understood collections."
+
+# The von Bortkiewicz data (and more)
+To investigate the data more thoroughly, the complete set of "Preussische Statistik" from 1861 to 1934 was examined in the microfiche collection of the University of Augsburg library.  These are a set of annual multi-volume reports containing several hundred pages of detailed statistics on Prussia, including for each year from 1875 to 1907 a one or two page report on fatal accidents in the Army.  The contents, structure, and format vary somewhat over the years.  This paper concentrates on information that is consistently available.
+
+New information was uncovered, in particular that there were more years of data on deaths of military personnel by horse kick for each Corps.  Von Bortkiewicz published his treatise in 1898.  When he actually did the analysis somewhat earlier, the 1894 data, which was published in 1896, may have been the latest available.  The earliest tables on military deaths in "Preussische Statistik" were from 1873 and merely reported some overall totals (e.g., that 2 soldiers had died from horsekicks that year in the whole Prussian army).  There was similar data for 1874 with the same total number.  It was 1875 when reporting by Army Corps began and this is where von Bortkiewicz started.  After 1894, the last year von Bortkiewicz reported, there were 13 further years of data.  All these data were part of the annual series of volumes on mortality in Prussia that ended with the publication for 1907.
+
+Von Bortkiewicz listed the volumes of "Preussische Statistik" in which the data were reported for the individual years.  Several articles have reprinted this list, although it is in error.  Volume 67 did not have the data for 1881, volume 72 did.  Could this have been an intentional error to see if readers had checked?  It could have been a misprint, as the early volumes up till 1888 were numbered in Roman style and LXVII (67) differs in only one letter from LXXII (72).  Volume 67 reported the harvest results in Prussia for 1881 ("Ernteertrages") and volume 72 reported deaths ("Sterbefälle").
+
+@stigler:2019 described the dataset as "highly selected" because there were many other causes of death reported.  Most of these applied to all the regiments in a Corps, not just the cavalry regiments.  In 1875 there were 20 causes listed and in 1899 there were 40.  Von Bortkiewicz would presumably have sought causes that were listed most years (so excluding, for instance, sunstroke and killed in an argument), where the numbers were not high (drowning was the most frequent cause of death each year with almost seven times as many deaths as from horse kicks between 1875 and 1894), and where the numbers were not very low (fewer died falling from a horse, just over half the number dying from horse kicks between 1875 and 1894).  He may have decided to take deaths from horse kicks, as the majority of these would have occurred only in cavalry regiments.  In presenting the data in his book von Bortkiewicz comments that four of the Corps differed from the others in size, particularly mentioning the number of cavalry squadrons they had.  He did not detail other differences between the Corps.  The only other cause of death related to horses is the one already referred to of having died falling from a horse.
+
+One minor error was found.  In his data for the year 1880, von Bortkiewicz said that the numbers of deaths for the X, XI, XIV, XV Corps were 1, 4, 3, 0.  Preussische Statistik Volume LXIII reports the numbers 0, 1, 4, 3.
+
+# Corps size and structure: who was killed by a horse kick?
+In 1875 there were 14 Prussian Army Corps.  Two more, XVI and XVII, were formed in 1890 and data on numbers of deaths on the Corps is available for them from that year onwards.  Army Corps XVIII was formed in 1899 and, again, data is available for it from then on.  Based on @hein:1901, a typical Corps was primarily comprised of two divisions each having two infantry brigades, a field artillery brigade and a cavalry brigade.  A brigade had two regiments. In total a typical Corps included eight infantry, four field artillery and four cavalry regiments.
+
+For the period in question each cavalry regiment was intended to have 620 men, 80 NCOs, and 25 officers, divided into five squadrons.   There are various sources for these plan figures (e.g., @witzl:1880), but none for actual numbers.  Both Kendall and Stigler write of officers having died from horse kicks, but the data were defined as referring to military personnel and up till 1899 deaths of NCOs were reported separately.  The total number of NCO deaths for the original dataset was 9 out of 196 (c. 4.6% of all deaths), and 11 out of 238 for the data up to 1899.  Given the relative numbers and the likelihood that officers would not have had to look after their own horses (each officer had at least two), there would have been very few, if any, deaths of officers from horse kicks.    There were generally just as many field artillery regiments as cavalry regiments in each Corps and they had about half as many horses (@friedag:1904).  Not all of the deaths by horse kick in a Corps would have been cavalrymen.  
+
+# Analysing the (corrected) original dataset
+Von Bortkiewicz carried out two analyses.  In the first he calculated a death rate for each Corps and then compared the distribution of the numbers of deaths per Corps per year with the sum of the expected distributions across all Corps, assuming Poisson distributions  for them.  His results with the uncorrected data are given in the column labelled "vonB" in the following table.  The column labelled "corrected" replicates his method of individual Poissons assuming all are truncated at 5. 
+```{r vonV12a, message = FALSE, warning = FALSE, echo=FALSE}
+library(tidyverse)
+library(knitr)
+options(knitr.kable.NA = '')
+hk <- read.table("newhk.txt", header = TRUE)
+corps_names <- c("G", as.character(as.roman(1:20)))
+hk <- hk %>% mutate(Year=factor(year), Corps=factor(corps, levels = intersect(corps_names, corps)))
+hk20 <- hk %>% filter(year < 1895)
+maxd <- max(hk20$kicks)
+hk20h <- hk20 %>% group_by(Corps) %>% count(kicks)
+hk20h <- hk20h %>% complete(kicks=full_seq(c(0:(maxd+1)), 1))
+hk20h <- hk20h %>% mutate(n=ifelse(is.na(n), 0, n))
+hk20h <- hk20h %>% mutate(sx=sum(n*kicks), px=sx/20)
+hk20h <- hk20h %>% mutate(ex=ifelse(kicks==maxd+1, 1-ppois(maxd, px), dpois(kicks, px)), Ex=20*ex)
+hk20H <- hk20h %>% ungroup() %>% group_by(kicks) %>% summarise(N=sum(n), corrected=sum(Ex))
+hk20H$vonB <- c(143.1, 92.1, 33.3, 8.9, 2.0, 0.6)
+ap <- with(hk20, sum(kicks)/dim(hk20)[1])
+hk20H <- hk20H %>% mutate(ej=ifelse(kicks==maxd+1, 1-ppois(maxd, ap), dpois(kicks, ap)), Jeffreys=280*ej)
+kable(hk20H %>% select(Deaths=kicks, freq=N, vonB, corrected, Jeffreys), digits=2, caption = "Observed and expected frequencies of deaths for the years 1875 to 1894")
+```
+
+The column labelled Jeffreys gives the expected values calculated in @jeffreys:1939 assuming a common Poisson rate for all.  The dataset correction does not affect this calculation.  The fits are good.  Jeffreys' figures support the Law of Small Numbers that @quine:1987 summarises as: Relatively short series of N independent observations, each on a Poisson ($\lambda_j$) (j = 1,... , N) distribution, tend to behave as if they are a sample of size N from a (homogeneous) Poisson distribution even if the $\lambda$'s are unequal.
+
+A chi-square goodness-of-fit test could be used on Jeffreys' model.  It is the usual one found in textbooks with the data truncated more to allow the use of distributional tables.  Alternatively simulation could be used to avoid truncating.   Since von Bortkiewicz estimated a rate for each Corps, a chi-square test would not be appropriate for his totals, but each Corps could be tested separately.  This shows that each is well fitted by a Poisson distribution.
+
+The second analysis von Bortkiewicz carried out excluded the four Corps that were larger than the rest.  He then calculated expected values assuming all Corps had the same rate and obtained the following table.  This calculation is also not affected by the dataset correction.
+
+```{r vonV12b, message = FALSE, warning = FALSE, echo=FALSE}
+hk20l <- hk20 %>% filter(!(Corps %in% c("G", "I", "VI", "XI")))
+maxl <- max(hk20l$kicks)
+hk20hl <- hk20l %>% group_by(Corps) %>% count(kicks)
+hk20hl <- hk20hl %>% complete(kicks=full_seq(c(0:(maxl+1)), 1))
+hk20hl <- hk20hl %>% mutate(n=ifelse(is.na(n), 0, n))
+apl <- with(hk20l, sum(kicks)/dim(hk20l)[1])
+hk20hL <- hk20hl %>% ungroup() %>% group_by(kicks) %>% summarise(N=sum(n))
+hk20hL <- hk20hL %>% mutate(el=ifelse(kicks==maxl+1, 1-ppois(maxl, apl), dpois(kicks, apl)), vonB=200*el)
+kable(hk20hL %>% select(Deaths=kicks, freq=N, vonB), digits=1, caption = "Observed and expected frequencies of deaths for the years 1875 to 1894 for the ten 'typical' Corps")
+```
+
+This is such a good fit that some writers accused von Bortkiewicz of selecting his data by excluding the four Corps with the highest numbers of deaths (e.g., @coleman:1964)---except that is not what he did.  Excluding the four biggest Corps still left the "typical" XIVth Corps with the second highest number of deaths in the dataset.
+
+The dataset is mostly used in textbooks for illustrating the Poisson distribution and how to test for goodness of fit.  @preece:1988 argued that even if the fit was apparently good, there might still be evidence of heterogeneity and discussed fitting generalised linear models using all 14 Corps.  An analysis of deviance table for the model, including likelihood ratio tests, suggests that Year is a significant factor, implying different rates over time, but that Corps is not.
+
+```{r vonVglm, message = FALSE, warning = FALSE, echo=FALSE}
+my20 <- glm(kicks~Corps+Year, family=poisson(), data=hk20)
+my20t <- anova(my20, test="LRT")
+row.names(my20t) <- c("", "Corps", "Year")
+kable(my20t, digits=3, caption = "Analysis of deviance table for a glm model of deaths by horse kick from 1875 to 1894 dependent on Corps and Year")
+```
+
+@preece:1988 concluded that the "data were too few to detect heterogeneity using the Pearson $\chi^2$ test for the fit of a single Poisson distribution to the frequency distribution of the data."  This suggests that they would have liked to have had more data, and, as it turns out, there is more.
+
+# Modelling the enlarged dataset
+A time dependent dataset such as deaths by horse kick might be enlarged in several ways.
+
+* *Earlier data*  There were two years of limited earlier data that are not comparable with the rest.
+* *Later data* There were 13 years of comparable later data.
+* *More detailed information on deaths*  The numbers of deaths of NCOs were listed separately for each Corps until 1899, but included in the totals.
+* *Additional results*  There was information on many other causes of death.
+* *Additional information on individual units*  The ten typical Corps had 4 regiments each, while the Guards had 8.  According to von Bortkiewicz, Corps VI had 5 regiments while Corps I and XI had 6 regiments each.
+* *More units*  Three more Corps were formed during the period.  Much less data was available for them.
+
+The later years were added, as were the numbers of NCOs killed by horse kicks.  Two additional causes of death were added, deaths by drowning and deaths from falling from a horse.  The number of regiments in each Corps was added.
+
+The annual rates of the three causes of death in the enlarged dataset are shown in Figure \@ref(fig:vonBrates).   A red dotted line marks the boundary between the old and new data.
+
+```{r vonBrates, fig.asp=0.5, echo=FALSE, fig.cap = 'Numbers of deaths per year from three causes'}
+hky <- hk %>% group_by(Year) %>% summarise(nn=n(), totF=sum(kicks), totD=sum(drowned, na.rm=TRUE), totH=sum(falls, na.rm=TRUE))
+hky <- hky %>% select(-nn)
+hkl <- hky %>% pivot_longer(cols=totF:totH, values_to="freq", names_to="cause")
+ggplot(hkl, aes(Year, freq, group=cause, colour=cause)) + geom_line(linewidth=1.5) + xlab(NULL) + ylab(NULL) + scale_colour_manual(values=c("green", "orange", "grey60"), labels=c("drowning", "horse kicks", "fall from horse")) +  scale_x_discrete(breaks=seq(1875, 1910, 5)) + geom_vline(xintercept=20.5, linetype="dotted", colour="red") + theme(legend.title=element_blank())
+```
+
+The deaths from drowning declined over the years, but were still higher than the deaths from the other two causes at the end of the period.  The numbers of deaths from horse kicks and from falls from horses varied but were relatively stable.
+
+Repeating von Bortkiewicz's analyses for deaths by horse kick for the larger dataset again shows good Poisson fits, while the glm model for the larger dataset leads to this table.
+
+```{r vonVglmL, message = FALSE, warning = FALSE, echo=FALSE}
+my <- glm(kicks~Corps+Year, family=poisson(), data=hk)
+myt <- anova(my, test="LRT")
+row.names(myt) <- c("", "Corps", "Year")
+kable(myt, digits=3, caption = "Analysis of deviance table for a glm model of deaths by horse kick from 1875 to 1907 dependent on Corps and Year")
+```
+
+Both factors Corps and Year, are now significant, but only slightly.  In particular, Year is now far less significant.  A test of the total deviance gives a p-value of just over 0.05, suggesting that the simple Poisson model with a single common rate could suffice.  A lettervalue plot (@piepho:2004) using Tukey tests and a significance level of 0.05 shows no differences amongst the Corps, Figure \@ref(fig:vonBlv), not even between Corps VI with the highest rate and Corps VIII with the lowest.
+
+```{r vonBlv, fig.asp=0.5, fig.width=10, message=FALSE, warning=FALSE, echo=FALSE, fig.cap = 'Lettervalue plot for death rates from horse kicks by Corps'}
+library(multcomp)
+glht.my <- glht(my, mcp(Corps = "Tukey"))
+my.cld <- cld(glht.my, level=0.05)
+plot(my.cld)
+```
+
+Other models might be employed.  Including the number of regiments was not effective.  Preece et al looked at negative binomial models for the original horse kicks data, but decided there was too little data to draw firm conclusions.  Another suggestion was to fit a mixed model with year as a random effect.  This was tried and the estimated variance of the random effect was small.  Lindsey suggested in his analysis of the original data that the first three years were different and fit a model splitting the years into two groups (@lindsey:1995).  The total numbers for the first two years were low.  It was the beginning of the process of collecting data and you could make a case for excluding them.  If you looked hard enough there might be reasons for excluding other parts of the data too, a fairly subjective approach.
+
+For comparative purposes two other causes of death were analysed.  The data for death by falling from a horse could be successfully fitted to Poisson distributions for individual Corps.  A glm of similar form to the one used for deaths by horse kick suggested that neither Corps nor Year were significant factors.  Deaths by drowning were quite different.  There were a lot more of them, partly because this could have happened to any of the around 20000 military personnel in a Corps (numbers of infantry regiments varied), not just those working with horses (around 5500).  Possibly some could have happened to groups of soldiers and not been independent events.  In earlier years, until 1889, deaths while at work ("davon im Berufe") were reported as a subset of total deaths for each cause.  For drowning there were many cases while not at work, for other causes hardly any.  Where Corps were stationed could have been a factor.  The Ist Corps had an average of 7 deaths per year from drowning, much higher than other Corps, and was based in East Prussia, mainly near Königsberg (now Kaliningrad) on the coast and in the Masurian Lake district.  Simple Poisson models do not fit well and Corps and Year effects are highly significant.
+
+# Summary
+It is worth checking sources of datasets, even when the dataset is ostensibly as well-known as von Bortkiewicz's on deaths of Prussian soldiers from horse kicks.  The horse kicks dataset is not only instructive as an example for the Poisson distribution, as it has been used for many years, it is also an example of how important background information can be, and of how statistical modelling has advanced.
+
+Datasets may be augmented in several ways, not just in data, but in context.  It was possible to extend the original dataset, adding both extra years of data and extra variables.  Background information on the structure and size of the Army Corps was added as well.
+
+Previous analyses concluded that a Poisson model was a good fit to the death by horse kick data and yet there was some evidence of variation amongst the Corps and over the years.  The additional data did not alter these conclusions.  There could have been reasons for differences.  The Corps were stationed in different places, their training may have differed, their generals may have commanded differently.  Over time there were changes in equipping and organising the Corps.  Nevertheless, the differences were not substantial enough to decisively reject the fit of simple Poisson models for the deaths from horse kicks (or from the deaths from falling from a horse).  Death by drowning was a very different matter.
+
+Using today's modelling techniques to analyse old datasets brings deeper understanding and sometimes new results.  The expectation of some researchers that more years of data would lead to stronger evidence of differences turned out not be true here.  What was confirmed was that von Bortkiewicz's choice of the Army Corps death data was a good choice to illustrate the idea he put forward as the Law of Small Numbers.  Presumably he would have been pleased.
+
+### Acknowledgements {-}
+Thanks to Dieter Storz of the Bavarian Army Museum for information on the structure and size of the Prussian Army Corps.
+
+### References
+
